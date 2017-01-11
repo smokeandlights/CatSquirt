@@ -1,13 +1,17 @@
-const int pirpin = 3;
-const int valvepin = 4;
-const int greenled = 5;
-const int redled = 13;
-const int temppin = A0;
-const int repeatDelay = 10000;
-int squirt = 250;
-unsigned long lastShot = 0;
-int shotsFired = 0;
-int inByte = 0;
+/* 
+This is the sketch for a cat deterrent system to try to get the outdoor cats in the neighborhood to avoid being under my deck.
+I am connecting the output of this to a 12v solenoid valve tied into my garden hose and some kind of sprayer attachment. 
+*/
+const int pirpin = 3;   //PIR Motion Detector
+const int valvepin = 4; //TIP122 (because I have those on hand) transistor to trigger a 12v solenoid valve
+const int greenled = 5; //System ARMED
+const int redled = 13;  //Waiting to rearm trigger - 
+const int temppin = A0; //TMP36 temperature sensor
+const int repeatDelay = 10000; //avoid constant triggering - the PIR triggers for about 2 seconds at the lowest setting.
+int squirt = 250;       //length of time the valve will be opened each time it is triggered
+unsigned long lastShot = 0; //timekeeping on the most recent shot
+int shotsFired = 0;     //keeping track of shots fired
+int inByte = 0;         //for serial, to get a response when idle
 
 void setup() {
   pinMode(greenled, OUTPUT);
@@ -42,7 +46,7 @@ void loop() {
     Serial.println(" degrees F" );
   }
 
-  if (millis() >= lastShot + (repeatDelay)) { //avoid constant triggering - the PIR triggers for about 2 seconds at the lowest setting.
+  if (millis() >= lastShot + (repeatDelay)) { 
 
     digitalWrite(redled, LOW);
     digitalWrite(greenled, HIGH);
