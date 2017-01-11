@@ -1,3 +1,5 @@
+#include <RTClib.h>
+
 const int pirpin = 3;
 const int valvepin = 4;
 const int greenled = 5;
@@ -8,6 +10,8 @@ int squirt = 250;
 unsigned long lastShot = 0;
 int shotsFired = 0;
 int inByte = 0;
+char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+
 
 void setup() {
   pinMode(greenled, OUTPUT);
@@ -66,8 +70,23 @@ void loop() {
         Serial.print("Shot " );
         Serial.print(shotsFired);
         Serial.print(" fired at " );
-        Serial.print(lastShot / 1000);
-        Serial.print(" seconds of runtime." );
+       DateTime now = rtc.now();
+    
+    Serial.print(now.year(), DEC);
+    Serial.print('/');
+    Serial.print(now.month(), DEC);
+    Serial.print('/');
+    Serial.print(now.day(), DEC);
+//    Serial.print(" (");
+//    Serial.print(daysOfTheWeek[now.dayOfTheWeek()]);
+//    Serial.print(") ");
+    Serial.print(now.hour(), DEC);
+    Serial.print(':');
+    Serial.print(now.minute(), DEC);
+    Serial.print(':');
+    Serial.print(now.second(), DEC);
+    Serial.println();
+    
         Serial.print(" Ambient Temperature: " );
         Serial.print(tempF);
         Serial.println(" degrees F" );
